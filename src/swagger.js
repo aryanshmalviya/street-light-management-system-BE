@@ -23,6 +23,11 @@ const options = {
         description: 'Production Server',
       },
     ],
+    security: [
+      {
+        BearerAuth: [],
+      },
+    ],
     components: {
       securitySchemes: {
         BearerAuth: {

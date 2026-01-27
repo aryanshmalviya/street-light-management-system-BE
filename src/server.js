@@ -8,6 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 const specs = require('./swagger');
 const logger = require('./utils/logger');
 
+const authRoutes = require('./routes/authRoutes');
 const streetLightRoutes = require('./routes/streetLightRoutes');
 const monitoringRoutes = require('./routes/monitoringRoutes');
 const faultDetectionRoutes = require('./routes/faultDetectionRoutes');
@@ -46,6 +47,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
 }));
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/lights', streetLightRoutes);
 app.use('/api/monitoring', monitoringRoutes);
 app.use('/api/faults', faultDetectionRoutes);

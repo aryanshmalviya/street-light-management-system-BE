@@ -9,6 +9,7 @@
     "test": "jest",
     "migrate": "node src/database/migrations.js",
     "seed": "node src/database/seed.js",
+    "diagnose": "node diagnose-db.js",
     "verify": "node verify-setup.js"
   },
   "keywords": [
