@@ -15,31 +15,15 @@ async function createTables() {
       );
     `);
 
-    // Highway Sections table
-    await db.query(`
-      CREATE TABLE IF NOT EXISTS highway_sections (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        highway_number VARCHAR(50) NOT NULL,
-        start_km DECIMAL(10, 2),
-        end_km DECIMAL(10, 2),
-        length_km DECIMAL(10, 2),
-        status VARCHAR(50) DEFAULT 'active',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
-
     // Street Lights table
     await db.query(`
       CREATE TABLE IF NOT EXISTS street_lights (
         id SERIAL PRIMARY KEY,
         light_id VARCHAR(100) UNIQUE NOT NULL,
-        section_id INTEGER NOT NULL REFERENCES highway_sections(id) ON DELETE CASCADE,
+        section_id INTEGER NOT NULL ,
         latitude DECIMAL(9, 6),
         longitude DECIMAL(9, 6),
         wattage INTEGER,
-        pole_height DECIMAL(5, 2),
         status VARCHAR(50) DEFAULT 'operational',
         installation_date TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -107,10 +91,10 @@ async function createTables() {
         scheduled_date TIMESTAMP,
         completed_date TIMESTAMP,
         status VARCHAR(50) DEFAULT 'pending',
-        assigned_to INTEGER REFERENCES users(id),
+        assigned_to INTEGER R EFERENCES users(id),
         notes TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMEST AMP
       );
       CREATE INDEX IF NOT EXISTS idx_maintenance_status ON maintenance_schedule(status);
       CREATE INDEX IF NOT EXISTS idx_maintenance_scheduled_date ON maintenance_schedule(scheduled_date);
