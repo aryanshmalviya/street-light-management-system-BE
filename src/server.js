@@ -4,6 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const http = require('http');
 const socketIo = require('socket.io');
+const swaggerUi = require('swagger-ui-express');
+const specs = require('./swagger');
 const logger = require('./utils/logger');
 
 const streetLightRoutes = require('./routes/streetLightRoutes');
@@ -33,6 +35,15 @@ app.use((req, res, next) => {
   logger.info(`${req.method} ${req.path}`);
   next();
 });
+
+// Swagger documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+  swaggerOptions: {
+    tryItOutEnabled: true,
+    filter: true,
+    docExpansion: 'list'
+  }
+}));
 
 // Routes
 app.use('/api/lights', streetLightRoutes);

@@ -8,6 +8,10 @@ A comprehensive Node.js backend application for centralized automation, monitori
 ✅ **Fault Detection & Alerts** - Automatic detection and reporting of light failures with severity levels
 ✅ **Energy Usage Tracking** - Daily and monthly energy consumption monitoring with cost analysis
 ✅ **Maintenance Scheduling** - Automated maintenance scheduling with assignment and completion tracking
+✅ **Carbon Footprint Tracking** - Environmental impact monitoring and carbon credit calculations
+✅ **Swagger API Documentation** - Interactive API explorer for testing endpoints
+✅ **Real-time Updates** - WebSocket support via Socket.IO for live data streaming
+✅ **Centralized Control** - Unified management of all highway sections
 ✅ **Carbon Footprint Reporting** - Environmental impact tracking including CO2 emissions and carbon credits
 ✅ **Centralized Control** - Manage all highway sections and lights from a single dashboard
 ✅ **WebSocket Real-time Updates** - Live data streaming for monitoring dashboards
@@ -107,6 +111,49 @@ src/
    ```bash
    npm run dev
    ```
+
+## API Documentation (Swagger/OpenAPI)
+
+### Interactive API Explorer
+
+Once the server is running, access the **Swagger UI** at:
+
+```
+http://localhost:3000/api-docs
+```
+
+### Features in Swagger UI
+
+✨ **Try It Out** - Test API endpoints directly in the browser
+📋 **Complete Schema** - View request/response formats
+🔐 **Authentication** - Add JWT tokens for protected endpoints  
+📚 **Detailed Documentation** - Parameter descriptions and examples
+
+### Using Swagger to Test Endpoints
+
+1. Open `http://localhost:3000/api-docs`
+2. Click on any endpoint to expand it
+3. Click "Try it out" button
+4. Fill in required parameters
+5. Click "Execute" to send request
+6. View response in real-time
+
+### Example: Testing Create Light Endpoint
+
+```bash
+# The Swagger UI will auto-generate this curl command:
+curl -X POST "http://localhost:3000/api/lights" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "light_id": "NH-001-001",
+    "section_id": 1,
+    "latitude": 28.7041,
+    "longitude": 77.1025,
+    "wattage": 150,
+    "pole_height": 10.5
+  }'
+```
 
 ## API Endpoints
 
