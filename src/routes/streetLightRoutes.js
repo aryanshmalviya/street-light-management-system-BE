@@ -11,14 +11,14 @@ router.use(authMiddleware);
  * @swagger
  * /lights:
  *   get:
- *     summary: Get all street lights
+ *     summary: Get all street lights (assets)
  *     tags: [Street Lights]
  *     parameters:
  *       - in: query
- *         name: sectionId
+ *         name: zoneId
  *         schema:
- *           type: integer
- *         description: Filter by highway section ID
+ *           type: string
+ *         description: Filter by zone ID
  *     responses:
  *       200:
  *         description: List of all street lights
@@ -32,7 +32,7 @@ router.use(authMiddleware);
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/StreetLight'
+ *                     $ref: '#/components/schemas/Asset'
  *       401:
  *         description: Unauthorized
  *       500:
@@ -44,15 +44,15 @@ router.get('/', streetLightController.getAllLights);
  * @swagger
  * /lights/{id}:
  *   get:
- *     summary: Get street light by ID
+ *     summary: Get street light by pole ID
  *     tags: [Street Lights]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
- *         description: Street light ID
+ *           type: string
+ *         description: Pole ID
  *     responses:
  *       200:
  *         description: Street light details
@@ -64,7 +64,7 @@ router.get('/', streetLightController.getAllLights);
  *                 success:
  *                   type: boolean
  *                 data:
- *                   $ref: '#/components/schemas/StreetLight'
+ *                   $ref: '#/components/schemas/Asset'
  *       404:
  *         description: Light not found
  *       401:
@@ -85,27 +85,30 @@ router.get('/:id', streetLightController.getLightById);
  *           schema:
  *             type: object
  *             required:
- *               - light_id
- *               - section_id
+ *               - pole_id
+ *               - zone_id
  *             properties:
- *               light_id:
+ *               pole_id:
  *                 type: string
- *                 description: Unique light ID code
- *               section_id:
- *                 type: integer
- *                 description: Highway section ID
- *               latitude:
+ *                 description: Unique pole ID code
+ *               zone_id:
+ *                 type: string
+ *                 description: Zone ID
+ *               controller_id:
+ *                 type: string
+ *               fixture_type:
+ *                 type: string
+ *               installed_on:
+ *                 type: string
+ *                 format: date
+ *               status:
+ *                 type: string
+ *               gps_lat:
  *                 type: number
  *                 description: GPS latitude
- *               longitude:
+ *               gps_lng:
  *                 type: number
  *                 description: GPS longitude
- *               wattage:
- *                 type: integer
- *                 description: Power in watts
- *               pole_height:
- *                 type: number
- *                 description: Pole height in meters
  *     responses:
  *       201:
  *         description: Street light created successfully
@@ -117,7 +120,7 @@ router.get('/:id', streetLightController.getLightById);
  *                 success:
  *                   type: boolean
  *                 data:
- *                   $ref: '#/components/schemas/StreetLight'
+ *                   $ref: '#/components/schemas/Asset'
  *       400:
  *         description: Validation error
  *       401:
@@ -126,8 +129,8 @@ router.get('/:id', streetLightController.getLightById);
 router.post(
   '/',
   [
-    body('light_id').notEmpty().withMessage('light_id is required'),
-    body('section_id').isInt().withMessage('section_id must be an integer'),
+    body('pole_id').notEmpty().withMessage('pole_id is required'),
+    body('zone_id').notEmpty().withMessage('zone_id is required'),
   ],
   streetLightController.createLight
 );
@@ -143,8 +146,8 @@ router.post(
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
- *         description: Street light ID
+ *           type: string
+ *         description: Pole ID
  *     requestBody:
  *       required: true
  *       content:
@@ -168,7 +171,7 @@ router.post(
  *                 success:
  *                   type: boolean
  *                 data:
- *                   $ref: '#/components/schemas/StreetLight'
+ *                   $ref: '#/components/schemas/Asset'
  *       401:
  *         description: Unauthorized
  */
@@ -189,8 +192,8 @@ router.patch(
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
- *         description: Street light ID
+ *           type: string
+ *         description: Pole ID
  *     responses:
  *       200:
  *         description: Street light deleted successfully

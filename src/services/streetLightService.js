@@ -1,80 +1,82 @@
 const db = require('../database/connection');
 
 class StreetLightService {
-  static async getAllLights(sectionId) {
+  static async getAllLights(zoneId) {
     try {
-      let query = 'SELECT * FROM street_lights';
+      let query = 'SELECT * FROM assets';
       const params = [];
 
-      if (sectionId) {
-        query += ' WHERE section_id = $1';
-        params.push(sectionId);
+      if (zoneId) {
+        query += ' WHERE zone_id = $1';
+        params.push(zoneId);
       }
 
-      const result = await db.query(query + ' ORDER BY light_id', params);
+      const result = await db.query(query + ' ORDER BY pole_id', params);
       return result.rows;
     } catch (error) {
-      throw new Error(`Failed to fetch lights: ${error.message}`);
+      throw new Error(`Failed to fetch assets: ${error.message}`);
     }
   }
 
-  static async getLightById(lightId) {
+  static async getLightById(poleId) {
     try {
       const result = await db.query(
-        'SELECT * FROM street_lights WHERE id = $1',
-        [lightId]
+        'SELECT * FROM assets WHERE pole_id = $1',
+        [poleId]
       );
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Failed to fetch light: ${error.message}`);
+      throw new Error(`Failed to fetch asset: ${error.message}`);
     }
   }
 
   static async createLight(lightData) {
     try {
       const {
-        light_id,
-        section_id,
-        latitude,
-        longitude,
-        wattage,
-        pole_height,
+        pole_id,
+        zone_id,
+        controller_id,
+        fixture_type,
+        installed_on,
+        status,
+        gps_lat,
+        gps_lng,
       } = lightData;
 
       const result = await db.query(
-        `INSERT INTO street_lights (light_id, section_id, latitude, longitude, wattage, pole_height)
-         VALUES ($1, $2, $3, $4, $5, $6)
+        `INSERT INTO assets (pole_id, zone_id, controller_id, fixture_type, installed_on, status, gps_lat, gps_lng)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          RETURNING *`,
-        [light_id, section_id, latitude, longitude, wattage, pole_height]
+        [pole_id, zone_id, controller_id, fixture_type, installed_on, status, gps_lat, gps_lng]
       );
 
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Failed to create light: ${error.message}`);
+      throw new Error(`Failed to create asset: ${error.message}`);
     }
   }
 
-  static async updateLightStatus(lightId, status) {
+  static async updateLightStatus(poleId, status) {
     try {
       const result = await db.query(
-        `UPDATE street_lights SET status = $1, updated_at = CURRENT_TIMESTAMP
-         WHERE id = $2
+        `UPDATE assets SET status = $1
+         WHERE pole_id = $2
          RETURNING *`,
-        [status, lightId]
+        [status, poleId]
       );
 
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Failed to update light status: ${error.message}`);
+      throw new Error(`Failed to update asset status: ${error.message}`);
     }
   }
 
-  static async deleteLight(lightId) {
+  static async deleteLight(poleId) {
     try {
-      await db.query('DELETE FROM street_lights WHERE id = $1', [lightId]);
+      await db.query('DELETE FROM assets WHERE pole_id = $1', [poleId]);
       return true;
     } catch (error) {
-      throw new Error(`Failed to delete light: ${error.message}`);
+      throw new Error(`Failed to delete asset: ${error.message}`);
     }
   }
 }

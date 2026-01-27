@@ -15,6 +15,10 @@ const faultDetectionRoutes = require('./routes/faultDetectionRoutes');
 const energyTrackingRoutes = require('./routes/energyTrackingRoutes');
 const maintenanceRoutes = require('./routes/maintenanceRoutes');
 const carbonTrackingRoutes = require('./routes/carbonTrackingRoutes');
+const zoneRoutes = require('./routes/zoneRoutes');
+const controllerRoutes = require('./routes/controllerRoutes');
+const telemetryRoutes = require('./routes/telemetryRoutes');
+const automationRulesRoutes = require('./routes/automationRulesRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -49,6 +53,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/lights', streetLightRoutes);
+app.use('/api/zones', zoneRoutes);
+app.use('/api/controllers', controllerRoutes);
+app.use('/api/telemetry', telemetryRoutes);
+app.use('/api/automation-rules', automationRulesRoutes);
 app.use('/api/monitoring', monitoringRoutes);
 app.use('/api/faults', faultDetectionRoutes);
 app.use('/api/energy', energyTrackingRoutes);

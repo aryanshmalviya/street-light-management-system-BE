@@ -4,8 +4,8 @@ const logger = require('../utils/logger');
 
 exports.getAllLights = async (req, res) => {
   try {
-    const { sectionId } = req.query;
-    const lights = await StreetLightService.getAllLights(sectionId);
+    const { zoneId } = req.query;
+    const lights = await StreetLightService.getAllLights(zoneId);
     res.json({ success: true, data: lights });
   } catch (error) {
     logger.error('Error fetching lights:', error);
@@ -49,7 +49,16 @@ exports.updateLightStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
+    if (!status) {
+      return res.status(400).json({ error: 'status is required' });
+    }
+
     const light = await StreetLightService.updateLightStatus(id, status);
+
+    if (!light) {
+      return res.status(404).json({ error: 'Light not found' });
+    }
+
     res.json({ success: true, data: light });
   } catch (error) {
     logger.error('Error updating light status:', error);
