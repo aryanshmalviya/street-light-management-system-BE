@@ -79,27 +79,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Real-time monitoring via WebSocket
-io.on('connection', (socket) => {
-  logger.info(`Client connected: ${socket.id}`);
-
-  socket.on('subscribe_light', (lightId) => {
-    socket.join(`light_${lightId}`);
-    logger.info(`Client ${socket.id} subscribed to light ${lightId}`);
-  });
-
-  socket.on('unsubscribe_light', (lightId) => {
-    socket.leave(`light_${lightId}`);
-    logger.info(`Client ${socket.id} unsubscribed from light ${lightId}`);
-  });
-
-  socket.on('disconnect', () => {
-    logger.info(`Client disconnected: ${socket.id}`);
-  });
-});
-
-// Export io for use in other modules
-app.locals.io = io;
 
 const PORT = process.env.PORT || 3000;
 
