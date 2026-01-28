@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
+    "dev:clean": "pkill -9 -f 'nodemon src/server.js' || true && pkill -9 -f 'node src/server.js' || true && sleep 1 && nodemon src/server.js",
+    "kill:port": "lsof -i :3000 | grep -v COMMAND | awk '{print $2}' | xargs kill -9 2>/dev/null || true",
     "test": "jest",
     "migrate": "node src/database/migrations.js",
     "seed": "node src/database/seed.js",

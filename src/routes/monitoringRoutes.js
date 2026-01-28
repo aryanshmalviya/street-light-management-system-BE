@@ -91,50 +91,6 @@ router.post('/record', monitoringController.recordMonitoringData);
  */
 router.get('/:lightId/latest', monitoringController.getLatestMonitoringData);
 
-/**
- * @swagger
- * /monitoring/{lightId}/range:
- *   get:
- *     summary: Get monitoring data for a light within date range
- *     tags: [Monitoring]
- *     parameters:
- *       - in: path
- *         name: lightId
- *         required: true
- *         schema:
- *           type: integer
- *         description: Street light ID
- *       - in: query
- *         name: startDate
- *         required: true
- *         schema:
- *           type: string
- *           format: date-time
- *         description: Start date for data range
- *       - in: query
- *         name: endDate
- *         required: true
- *         schema:
- *           type: string
- *           format: date-time
- *         description: End date for data range
- *     responses:
- *       200:
- *         description: Monitoring data for date range
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/MonitoringData'
- *       401:
- *         description: Unauthorized
- */
 router.get('/:lightId/range', monitoringController.getMonitoringDataRange);
 
 /**

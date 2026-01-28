@@ -5,22 +5,23 @@ class MaintenanceService {
     try {
       const {
         ticket_id,
-        fault_id,
-        assigned_to,
+        ticket_desc,
+        pole_id,
+        zone_id,
         sla_hours,
-        status,
       } = ticketData;
 
       const result = await db.query(
-        `INSERT INTO maintenance_tickets (ticket_id, fault_id, assigned_to, created_at, sla_hours, status)
-         VALUES ($1, $2, $3, CURRENT_TIMESTAMP, $4, $5)
+        `INSERT INTO maintenance_tickets (ticket_id, ticket_desc, pole_id, zone_id, created_at, sla_hours, status)
+         VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5, $6)
          RETURNING *`,
         [
           ticket_id,
-          fault_id,
-          assigned_to,
+          ticket_desc,
+          pole_id,
+          zone_id,
           sla_hours,
-          status || 'open',
+          'pending',
         ]
       );
 
@@ -32,17 +33,66 @@ class MaintenanceService {
     }
   }
 
-  static async getPendingTickets(limit = 50) {
+  static async assignTicket(ticketId, assignedTo) {
     try {
       const result = await db.query(
-        `SELECT m.*, u.name as assigned_to_name, f.pole_id, f.fault_code
+        `UPDATE maintenance_tickets 
+         SET assigned_to = $1, status = $2
+         WHERE ticket_id = $3
+         RETURNING *`,
+        [assignedTo, 'assigned', ticketId]
+      );
+
+      if (!result.rows[0]) {
+        throw new Error('Ticket not found');
+      }
+
+      return result.rows[0];
+    } catch (error) {
+      throw new Error(
+        `Failed to assign ticket: ${error.message}`
+      );
+    }
+  }
+
+  static async updateTicketStatus(ticketId, status) {
+    try {
+      const validStatuses = ['pending', 'assigned', 'in_progress', 'completed'];
+      
+      if (!validStatuses.includes(status)) {
+        throw new Error(`Invalid status. Allowed values: ${validStatuses.join(', ')}`);
+      }
+
+      const result = await db.query(
+        `UPDATE maintenance_tickets 
+         SET status = $1
+         WHERE ticket_id = $2
+         RETURNING *`,
+        [status, ticketId]
+      );
+
+      if (!result.rows[0]) {
+        throw new Error('Ticket not found');
+      }
+
+      return result.rows[0];
+    } catch (error) {
+      throw new Error(
+        `Failed to update ticket status: ${error.message}`
+      );
+    }
+  }
+
+  static async getPendingTickets(zoneId, limit = 50) {
+    try {
+      const result = await db.query(
+        `SELECT m.*, u.name as assigned_to_name
          FROM maintenance_tickets m
          LEFT JOIN users u ON m.assigned_to = u.user_id
-         LEFT JOIN faults f ON m.fault_id = f.fault_id
-         WHERE m.status IN ('open', 'in_progress')
+         WHERE m.zone_id = $1 AND m.status IN ('pending', 'assigned', 'in_progress')
          ORDER BY m.created_at ASC
-         LIMIT $1`,
-        [limit]
+         LIMIT $2`,
+        [zoneId, limit]
       );
 
       return result.rows;
@@ -56,9 +106,9 @@ class MaintenanceService {
   static async getTicketsByUser(assignedTo, limit = 50) {
     try {
       const result = await db.query(
-        `SELECT m.*, f.pole_id, f.fault_code, f.severity
+        `SELECT m.*, u.name as assigned_to_name
          FROM maintenance_tickets m
-         LEFT JOIN faults f ON m.fault_id = f.fault_id
+         LEFT JOIN users u ON m.assigned_to = u.user_id
          WHERE m.assigned_to = $1
          ORDER BY m.created_at DESC
          LIMIT $2`,
@@ -73,16 +123,16 @@ class MaintenanceService {
     }
   }
 
-  static async getTicketHistory(limit = 50) {
+  static async getMaintenanceHistory(zoneId, limit = 50) {
     try {
       const result = await db.query(
-        `SELECT m.*, u.name as assigned_to_name, f.pole_id, f.fault_code
+        `SELECT m.*, u.name as assigned_to_name
          FROM maintenance_tickets m
          LEFT JOIN users u ON m.assigned_to = u.user_id
-         LEFT JOIN faults f ON m.fault_id = f.fault_id
+         WHERE m.zone_id = $1
          ORDER BY m.created_at DESC
-         LIMIT $1`,
-        [limit]
+         LIMIT $2`,
+        [zoneId, limit]
       );
 
       return result.rows;
@@ -93,28 +143,10 @@ class MaintenanceService {
     }
   }
 
-  static async updateTicketStatus(ticketId, status) {
-    try {
-      const result = await db.query(
-        `UPDATE maintenance_tickets 
-         SET status = $1
-         WHERE ticket_id = $2
-         RETURNING *`,
-        [status, ticketId]
-      );
-
-      return result.rows[0];
-    } catch (error) {
-      throw new Error(
-        `Failed to update ticket status: ${error.message}`
-      );
-    }
-  }
-
   static async getTicketById(ticketId) {
     try {
       const result = await db.query(
-        'SELECT * FROM maintenance_tickets WHERE ticket_id = $1',
+        'SELECT m.*, u.name as assigned_to_name FROM maintenance_tickets m LEFT JOIN users u ON m.assigned_to = u.user_id WHERE m.ticket_id = $1',
         [ticketId]
       );
 
@@ -126,15 +158,18 @@ class MaintenanceService {
     }
   }
 
-  static async getMaintenanceStatistics() {
+  static async getMaintenanceStatistics(zoneId) {
     try {
       const result = await db.query(
         `SELECT 
           COUNT(*) as total_tickets,
-          COUNT(CASE WHEN status = 'open' THEN 1 END) as open,
-          COUNT(CASE WHEN status = 'in_progress' THEN 1 END) as in_progress,
-          COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed
-         FROM maintenance_tickets`
+          COUNT(CASE WHEN m.status = 'pending' THEN 1 END) as pending,
+          COUNT(CASE WHEN m.status = 'assigned' THEN 1 END) as assigned,
+          COUNT(CASE WHEN m.status = 'in_progress' THEN 1 END) as in_progress,
+          COUNT(CASE WHEN m.status = 'completed' THEN 1 END) as completed
+         FROM maintenance_tickets m
+         WHERE m.zone_id = $1`,
+        [zoneId]
       );
 
       return result.rows[0];
