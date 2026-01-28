@@ -4,7 +4,8 @@ class TelemetryService {
   static async getTelemetryByPole(poleId, limit = 100) {
     try {
       const result = await db.query(
-        `SELECT * FROM telemetry 
+        `SELECT telemetry_id, pole_id, ts, state, voltage, current_a, power_w, energy_kwh, ambient_lux, temperature_c, dimming_level, fault_code
+         FROM telemetry 
          WHERE pole_id = $1 
          ORDER BY ts DESC 
          LIMIT $2`,
@@ -19,7 +20,7 @@ class TelemetryService {
   static async getTelemetryById(telemetryId) {
     try {
       const result = await db.query(
-        'SELECT * FROM telemetry WHERE telemetry_id = $1',
+        'SELECT telemetry_id, pole_id, ts, state, voltage, current_a, power_w, energy_kwh, ambient_lux, temperature_c, dimming_level, fault_code FROM telemetry WHERE telemetry_id = $1',
         [telemetryId]
       );
       return result.rows[0];
@@ -76,7 +77,8 @@ class TelemetryService {
   static async getLatestTelemetry(poleId) {
     try {
       const result = await db.query(
-        `SELECT * FROM telemetry 
+        `SELECT telemetry_id, pole_id, ts, state, voltage, current_a, power_w, energy_kwh, ambient_lux, temperature_c, dimming_level, fault_code
+         FROM telemetry 
          WHERE pole_id = $1 
          ORDER BY ts DESC 
          LIMIT 1`,
@@ -91,7 +93,8 @@ class TelemetryService {
   static async getTelemetryRange(poleId, startTime, endTime) {
     try {
       const result = await db.query(
-        `SELECT * FROM telemetry 
+        `SELECT telemetry_id, pole_id, ts, state, voltage, current_a, power_w, energy_kwh, ambient_lux, temperature_c, dimming_level, fault_code
+         FROM telemetry 
          WHERE pole_id = $1 AND ts BETWEEN $2 AND $3
          ORDER BY ts DESC`,
         [poleId, startTime, endTime]

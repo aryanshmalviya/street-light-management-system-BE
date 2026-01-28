@@ -26,7 +26,7 @@ class ZoneService {
     try {
       const {
         zone_id,
-        name,
+        zone_name,
         length_km,
         latitude,
         longitude,
@@ -37,7 +37,7 @@ class ZoneService {
         `INSERT INTO zones (zone_id, name, length_km, latitude, longitude, poles)
          VALUES ($1, $2, $3, $4, $5, $6)
          RETURNING *`,
-        [zone_id, name, length_km, latitude, longitude, poles || 0]
+        [zone_id, zone_name, length_km, latitude, longitude, poles || 0]
       );
 
       return result.rows[0];
@@ -48,7 +48,7 @@ class ZoneService {
 
   static async updateZone(zoneId, zoneData) {
     try {
-      const { name, length_km, latitude, longitude, poles } = zoneData;
+      const { zone_name, length_km, latitude, longitude, poles } = zoneData;
 
       const result = await db.query(
         `UPDATE zones SET name = COALESCE($1, name), 
@@ -58,7 +58,7 @@ class ZoneService {
                          poles = COALESCE($5, poles)
          WHERE zone_id = $6
          RETURNING *`,
-        [name, length_km, latitude, longitude, poles, zoneId]
+        [zone_name, length_km, latitude, longitude, poles, zoneId]
       );
 
       return result.rows[0];

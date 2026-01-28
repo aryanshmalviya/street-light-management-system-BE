@@ -48,9 +48,7 @@ CREATE TABLE IF NOT EXISTS public.controllers
     connectivity text COLLATE pg_catalog."default",
     CONSTRAINT controllers_pkey PRIMARY KEY (controller_id)
 )
--- Table: public.faults
 
--- DROP TABLE IF EXISTS public.faults;
 
 CREATE TABLE IF NOT EXISTS public.faults
 (
@@ -123,7 +121,7 @@ CREATE INDEX IF NOT EXISTS telemetry_pole_ts_idx
     (pole_id COLLATE pg_catalog."default" ASC NULLS LAST, ts DESC NULLS FIRST)
     TABLESPACE pg_default;
 
-    -- Table: public.users
+-- Table: public.users
 
 -- DROP TABLE IF EXISTS public.users;
 
@@ -151,3 +149,5 @@ CREATE TABLE IF NOT EXISTS public.zones
     CONSTRAINT zones_pkey PRIMARY KEY (zone_id)
 )
 
+ALTER TABLE IF EXISTS public.users
+    ADD COLUMN password character varying;

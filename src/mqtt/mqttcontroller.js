@@ -1,15 +1,21 @@
 const mqtt = require("mqtt");
+const {ulid} = require("ulid");
 
 // MQTT broker URL
-const brokerUrl = "653aff43ed7c4222954bebef306b9a90.s1.eu.hivemq.cloud";
+const brokerUrl = process.env.brokerUrl;
 
-const TelemetryService = require("./services/telemetryService");
+const TelemetryService = require("../services/telemetryService");
+
 
 // Create an MQTT client
-const client = mqtt.connect(brokerUrl);
+const client = mqtt.connect(brokerUrl, {
+  username: process.env.BROKERUSERNAME,  
+  password: process.env.BROKERPASS  
+});
 
 // Topic to subscribe to
-const topic = "test/topic";
+const topic = "telemetry/poles";
+const publish_topic ='control/poles';
 
 // Handle connection event
 client.on("connect", () => {
@@ -23,6 +29,31 @@ client.on("connect", () => {
       console.error("Subscription error:", err);
     }
   });
+
+  // Publish a test message
+  // const testData = {
+  //   pole_id: "mqtt_pole",
+  //   ts: new Date(),
+  //   state: "active",
+  //   voltage: 230.0,
+  //   current_a: 5.0,
+  //   power_w: 1150.0,
+  //   energy_kwh: 1.5,
+  //   ambient_lux: 300.0,
+  //   temperature_c: 25.0,
+  //   dimming_level: 80,
+  //   fault_code: null,
+  // };
+  //const testData2 = {"pole_id":"1","command":"OFF"}
+
+  
+  // client.publish(publish_topic, JSON.stringify(testData2), { qos: 1 }, (err) => {
+  //   if (err) {
+  //     console.error("Publish error:", err);
+  //   } else {
+  //     console.log("Message published successfully to topic:", publish_topic);
+  //   }
+  // });
 });
 
 // Handle incoming messages
@@ -30,8 +61,8 @@ client.on("message", (topic, message) => {
   // message is a Buffer
   console.log(`Received message on topic ${topic}: ${message.toString()}`);
   TelemetryService.recordTelemetry({
-    telemetry_id: null,
-    pole_id: "mqtt_pole",
+    telemetry_id: ulid(),
+    pole_id: "1",
     ts: new Date(),
     state: "active",
     voltage: 230.0,
@@ -60,5 +91,6 @@ client.on("error", (err) => {
 client.on("close", () => {
   console.log("Disconnected from MQTT broker");
 });
+//client.publish('telemetry/pole', 'Hello');
 
 module.exports = client;

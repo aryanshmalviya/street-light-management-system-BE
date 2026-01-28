@@ -20,14 +20,8 @@ const controllerRoutes = require('./routes/controllerRoutes');
 const telemetryRoutes = require('./routes/telemetryRoutes');
 const automationRulesRoutes = require('./routes/automationRulesRoutes');
 
+
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: process.env.SOCKET_IO_CORS || '*',
-    methods: ['GET', 'POST'],
-  },
-});
 
 // Middleware
 app.use(helmet());
@@ -41,7 +35,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Swagger documentation
+//Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
   swaggerOptions: {
     tryItOutEnabled: true,
@@ -50,7 +44,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
   }
 }));
 
-// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/lights', streetLightRoutes);
 app.use('/api/zones', zoneRoutes);
@@ -63,7 +56,7 @@ app.use('/api/energy', energyTrackingRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
 app.use('/api/carbon', carbonTrackingRoutes);
 
-// Health check endpoint
+//Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
 });
@@ -80,9 +73,10 @@ app.use((err, req, res, next) => {
 });
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
+require('./mqtt/mqttcontroller')
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   logger.info(`Server is running on port ${PORT}`);
 });
 
