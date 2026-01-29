@@ -76,3 +76,39 @@ exports.deleteLight = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// New controller: Control single pole
+exports.controlPole = async (req, res) => {
+  try {
+    const { poleId } = req.params;
+    const { command } = req.body;
+
+    if (!command) {
+      return res.status(400).json({ error: 'command is required (ON or OFF)' });
+    }
+
+    const result = await StreetLightService.controlPole(poleId, command);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    logger.error('Error controlling pole:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// New controller: Control all poles in a zone
+exports.controlZone = async (req, res) => {
+  try {
+    const { zoneId } = req.params;
+    const { command } = req.body;
+
+    if (!command) {
+      return res.status(400).json({ error: 'command is required (ON or OFF)' });
+    }
+
+    const result = await StreetLightService.controlZone(zoneId, command);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    logger.error('Error controlling zone:', error);
+    res.status(500).json({ error: error.message });
+  }
+};

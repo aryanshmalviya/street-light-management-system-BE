@@ -26,6 +26,20 @@ router.patch(
   streetLightController.updateLightStatus
 );
 
+// New API: Control single pole (ON/OFF)
+router.post(
+  '/:poleId/control',
+  [body('command').notEmpty().withMessage('command is required (ON or OFF)')],
+  streetLightController.controlPole
+);
+
+// New API: Control all poles in a zone (ON/OFF)
+router.post(
+  '/zone/:zoneId/control',
+  [body('command').notEmpty().withMessage('command is required (ON or OFF)')],
+  streetLightController.controlZone
+);
+
 router.delete('/:id', streetLightController.deleteLight);
 
 module.exports = router;

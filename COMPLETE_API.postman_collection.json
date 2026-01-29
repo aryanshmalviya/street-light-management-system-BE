@@ -1,0 +1,436 @@
+{
+  "info": {
+    "name": "Street Light Management - Complete API",
+    "description": "Complete API collection for street light management system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Street Lights",
+      "item": [
+        {
+          "name": "Get All Lights",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/lights?zoneId=ZONE-01",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "lights"
+              ],
+              "query": [
+                {
+                  "key": "zoneId",
+                  "value": "ZONE-01",
+                  "description": "Optional: Filter by zone ID"
+                }
+              ]
+            },
+            "description": "Get all street lights, optionally filtered by zone"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Light by Pole ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/lights/POLE-42",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "lights",
+                "POLE-42"
+              ]
+            },
+            "description": "Get details of a specific street light by pole ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Street Light",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pole_id\": \"POLE-42\",\n  \"zone_id\": \"ZONE-01\",\n  \"controller_id\": \"CTRL-01\",\n  \"fixture_type\": \"LED\",\n  \"installed_on\": \"2024-01-15\",\n  \"status\": \"active\",\n  \"gps_lat\": 28.6139,\n  \"gps_lng\": 77.2090\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/lights",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "lights"
+              ]
+            },
+            "description": "Create a new street light asset"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Light Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"inactive\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/lights/POLE-42/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "lights",
+                "POLE-42",
+                "status"
+              ]
+            },
+            "description": "Update the status of a street light"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Light",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/lights/POLE-42",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "lights",
+                "POLE-42"
+              ]
+            },
+            "description": "Delete a street light asset"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Street Light Control (MQTT)",
+      "item": [
+        {
+          "name": "Control Single Pole (ON/OFF)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"command\": \"OFF\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/lights/POLE-42/control",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "lights",
+                "POLE-42",
+                "control"
+              ]
+            },
+            "description": "Send ON/OFF command to a specific street light pole via MQTT. The command is published to the MQTT broker which will control the physical device."
+          },
+          "response": []
+        },
+        {
+          "name": "Control All Poles in Zone (ON/OFF)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"command\": \"OFF\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/lights/zone/ZONE-01/control",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "lights",
+                "zone",
+                "ZONE-01",
+                "control"
+              ]
+            },
+            "description": "Send ON/OFF command to all street light poles in a specific zone via MQTT. Commands are published for each pole in the zone. Returns success/failure status for each pole."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Maintenance",
+      "item": [
+        {
+          "name": "Create Maintenance Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ticket_id\": \"MAINT-001\",\n  \"ticket_desc\": \"Lamp not working - street light pole #42\",\n  \"pole_id\": \"POLE-42\",\n  \"zone_id\": \"ZONE-01\",\n  \"sla_hours\": 24\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/schedule",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "schedule"
+              ]
+            },
+            "description": "Create a new maintenance ticket with pending status"
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Ticket to User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assignedTo\": \"USER-123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/MAINT-001/assign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "MAINT-001",
+                "assign"
+              ]
+            },
+            "description": "Assign a maintenance ticket to a user (changes status to assigned)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Ticket Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/MAINT-001/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "MAINT-001",
+                "status"
+              ]
+            },
+            "description": "Update ticket status. Allowed values: pending, assigned, in_progress, completed"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Pending Maintenance Tickets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/pending?zoneId=ZONE-01&limit=50",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "pending"
+              ],
+              "query": [
+                {
+                  "key": "zoneId",
+                  "value": "ZONE-01",
+                  "description": "Zone ID (required)"
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Number of records to return (optional, default: 50)"
+                }
+              ]
+            },
+            "description": "Get all pending maintenance tickets for a specific zone (status: pending, assigned, in_progress)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Maintenance History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/history?zoneId=ZONE-01&limit=50",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "zoneId",
+                  "value": "ZONE-01",
+                  "description": "Zone ID (required)"
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Number of records to return (optional, default: 50)"
+                }
+              ]
+            },
+            "description": "Get complete maintenance history for a zone (all statuses)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ticket by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/MAINT-001",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "MAINT-001"
+              ]
+            },
+            "description": "Retrieve a specific maintenance ticket by its ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Maintenance Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/stats?zoneId=ZONE-01",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "stats"
+              ],
+              "query": [
+                {
+                  "key": "zoneId",
+                  "value": "ZONE-01",
+                  "description": "Zone ID (required)"
+                }
+              ]
+            },
+            "description": "Get statistics for maintenance tickets in a zone (total, pending, assigned, in_progress, completed)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Ticket",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/MAINT-001",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "MAINT-001"
+              ]
+            },
+            "description": "Delete a maintenance ticket by its ID"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}
