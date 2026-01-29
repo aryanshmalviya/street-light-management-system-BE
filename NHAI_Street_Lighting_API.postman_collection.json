@@ -1,8 +1,11 @@
 {
   "info": {
+    "_postman_id": "0da6a7e2-6e54-4ec4-a6ba-553be50006cc",
     "name": "NHAI Street Lighting Management System API",
     "description": "Centralized automation, monitoring, and intelligent management of street lighting systems on National Highways",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25660010",
+    "_collection_link": "https://go.postman.co/collection/25660010-0da6a7e2-6e54-4ec4-a6ba-553be50006cc?source=collection_link"
   },
   "item": [
     {
@@ -20,16 +23,23 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"John Doe\"\n}"
+              "raw": "{\n  \"email\": \"bansal2210sahil@gmail.com\",\n  \"password\": \"123456\",\n  \"name\": \"sahil\",\n  \"role\":\"admin\"\n}"
             },
             "url": {
               "raw": "http://localhost:3000/api/auth/register",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "auth", "register"]
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Login",
@@ -43,19 +53,29 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"bansal2210sahil@gmail.com\",\n  \"password\": \"123456\"\n}"
             },
             "url": {
               "raw": "http://localhost:3000/api/auth/login",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "auth", "login"]
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Profile",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
             "method": "GET",
             "header": [
@@ -64,14 +84,30 @@
                 "value": "Bearer {{token}}"
               }
             ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user_id\":\"01KG2V6250AYYFBGWF7XM2A6QW\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "http://localhost:3000/api/auth/profile",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "auth", "profile"]
+              "path": [
+                "api",
+                "auth",
+                "profile"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -79,7 +115,7 @@
       "name": "Street Lights",
       "item": [
         {
-          "name": "Get All Lights",
+          "name": "Get All Lights by zone",
           "request": {
             "method": "GET",
             "header": [
@@ -91,9 +127,14 @@
             "url": {
               "raw": "http://localhost:3000/api/lights?zoneId=1",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "lights"],
+              "path": [
+                "api",
+                "lights"
+              ],
               "query": [
                 {
                   "key": "zoneId",
@@ -101,10 +142,11 @@
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
-          "name": "Get Light by ID",
+          "name": "Get Light by pole id",
           "request": {
             "method": "GET",
             "header": [
@@ -116,11 +158,18 @@
             "url": {
               "raw": "http://localhost:3000/api/lights/1",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "lights", "1"]
+              "path": [
+                "api",
+                "lights",
+                "1"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create Street Light",
@@ -143,38 +192,17 @@
             "url": {
               "raw": "http://localhost:3000/api/lights",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "lights"]
+              "path": [
+                "api",
+                "lights"
+              ]
             }
-          }
-        },
-        {
-          "name": "Update Street Light",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"wattage\": 150,\n  \"status\": \"maintenance\"\n}"
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/lights/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "3000",
-              "path": ["api", "lights", "1"]
-            }
-          }
+          },
+          "response": []
         },
         {
           "name": "Delete Street Light",
@@ -189,11 +217,91 @@
             "url": {
               "raw": "http://localhost:3000/api/lights/1",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "lights", "1"]
+              "path": [
+                "api",
+                "lights",
+                "1"
+              ]
             }
-          }
+          },
+          "response": []
+        },
+        {
+          "name": "1. Control Single Pole (ON/OFF)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"command\":\"OFF\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/lights/1/control",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "lights",
+                "1",
+                "control"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Control All Poles in Zone (ON/OFF)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"command\":\"OFF\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/lights/zone/1/control",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "lights",
+                "zone",
+                "1",
+                "control"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -213,11 +321,17 @@
             "url": {
               "raw": "http://localhost:3000/api/zones",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "zones"]
+              "path": [
+                "api",
+                "zones"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Zone by ID",
@@ -232,11 +346,18 @@
             "url": {
               "raw": "http://localhost:3000/api/zones/1",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "zones", "1"]
+              "path": [
+                "api",
+                "zones",
+                "1"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create Zone",
@@ -259,11 +380,17 @@
             "url": {
               "raw": "http://localhost:3000/api/zones",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "zones"]
+              "path": [
+                "api",
+                "zones"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Update Zone",
@@ -286,11 +413,18 @@
             "url": {
               "raw": "http://localhost:3000/api/zones/1",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "zones", "1"]
+              "path": [
+                "api",
+                "zones",
+                "1"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Delete Zone",
@@ -305,11 +439,18 @@
             "url": {
               "raw": "http://localhost:3000/api/zones/1",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "zones", "1"]
+              "path": [
+                "api",
+                "zones",
+                "1"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Zone Stats",
@@ -324,11 +465,19 @@
             "url": {
               "raw": "http://localhost:3000/api/zones/1/stats",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "zones", "1", "stats"]
+              "path": [
+                "api",
+                "zones",
+                "1",
+                "stats"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -348,9 +497,16 @@
             "url": {
               "raw": "http://localhost:3000/api/telemetry/pole/pole-001?limit=100",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "telemetry", "pole", "pole-001"],
+              "path": [
+                "api",
+                "telemetry",
+                "pole",
+                "pole-001"
+              ],
               "query": [
                 {
                   "key": "limit",
@@ -358,7 +514,8 @@
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Telemetry by ID",
@@ -373,11 +530,18 @@
             "url": {
               "raw": "http://localhost:3000/api/telemetry/1",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "telemetry", "1"]
+              "path": [
+                "api",
+                "telemetry",
+                "1"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Record Telemetry",
@@ -400,11 +564,17 @@
             "url": {
               "raw": "http://localhost:3000/api/telemetry",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "telemetry"]
+              "path": [
+                "api",
+                "telemetry"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Latest Telemetry",
@@ -419,11 +589,20 @@
             "url": {
               "raw": "http://localhost:3000/api/telemetry/pole/pole-001/latest",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "telemetry", "pole", "pole-001", "latest"]
+              "path": [
+                "api",
+                "telemetry",
+                "pole",
+                "pole-001",
+                "latest"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Telemetry Range",
@@ -438,9 +617,17 @@
             "url": {
               "raw": "http://localhost:3000/api/telemetry/pole/pole-001/range?startDate=2024-01-01&endDate=2024-01-31",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "telemetry", "pole", "pole-001", "range"],
+              "path": [
+                "api",
+                "telemetry",
+                "pole",
+                "pole-001",
+                "range"
+              ],
               "query": [
                 {
                   "key": "startDate",
@@ -452,7 +639,8 @@
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Telemetry Stats",
@@ -467,11 +655,20 @@
             "url": {
               "raw": "http://localhost:3000/api/telemetry/pole/pole-001/stats",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "telemetry", "pole", "pole-001", "stats"]
+              "path": [
+                "api",
+                "telemetry",
+                "pole",
+                "pole-001",
+                "stats"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -499,11 +696,18 @@
             "url": {
               "raw": "http://localhost:3000/api/monitoring/record",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "monitoring", "record"]
+              "path": [
+                "api",
+                "monitoring",
+                "record"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Monitoring Data",
@@ -518,11 +722,17 @@
             "url": {
               "raw": "http://localhost:3000/api/monitoring",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "monitoring"]
+              "path": [
+                "api",
+                "monitoring"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -550,11 +760,18 @@
             "url": {
               "raw": "http://localhost:3000/api/energy-tracking/record",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "energy-tracking", "record"]
+              "path": [
+                "api",
+                "energy-tracking",
+                "record"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Daily Energy Usage",
@@ -569,9 +786,15 @@
             "url": {
               "raw": "http://localhost:3000/api/energy-tracking/daily?date=2024-01-15",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "energy-tracking", "daily"],
+              "path": [
+                "api",
+                "energy-tracking",
+                "daily"
+              ],
               "query": [
                 {
                   "key": "date",
@@ -579,7 +802,8 @@
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Monthly Energy Usage",
@@ -594,9 +818,15 @@
             "url": {
               "raw": "http://localhost:3000/api/energy-tracking/monthly?month=2024-01",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "energy-tracking", "monthly"],
+              "path": [
+                "api",
+                "energy-tracking",
+                "monthly"
+              ],
               "query": [
                 {
                   "key": "month",
@@ -604,7 +834,8 @@
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Energy Trends",
@@ -619,9 +850,15 @@
             "url": {
               "raw": "http://localhost:3000/api/energy-tracking/trends?period=weekly",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "energy-tracking", "trends"],
+              "path": [
+                "api",
+                "energy-tracking",
+                "trends"
+              ],
               "query": [
                 {
                   "key": "period",
@@ -629,7 +866,8 @@
                 }
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -657,11 +895,18 @@
             "url": {
               "raw": "http://localhost:3000/api/faults/report",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "faults", "report"]
+              "path": [
+                "api",
+                "faults",
+                "report"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Open Faults",
@@ -676,11 +921,18 @@
             "url": {
               "raw": "http://localhost:3000/api/faults/open",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "faults", "open"]
+              "path": [
+                "api",
+                "faults",
+                "open"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Faults by Light",
@@ -695,11 +947,18 @@
             "url": {
               "raw": "http://localhost:3000/api/faults/1",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "faults", "1"]
+              "path": [
+                "api",
+                "faults",
+                "1"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Resolve Fault",
@@ -722,11 +981,19 @@
             "url": {
               "raw": "http://localhost:3000/api/faults/1/resolve",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "faults", "1", "resolve"]
+              "path": [
+                "api",
+                "faults",
+                "1",
+                "resolve"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Fault Statistics",
@@ -741,11 +1008,19 @@
             "url": {
               "raw": "http://localhost:3000/api/faults/section/stats",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "faults", "section", "stats"]
+              "path": [
+                "api",
+                "faults",
+                "section",
+                "stats"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -753,33 +1028,10 @@
       "name": "Maintenance",
       "item": [
         {
-          "name": "Get All Maintenance Records",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:3000/api/maintenance",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "3000",
-              "path": ["api", "maintenance"]
-            }
-          }
-        },
-        {
-          "name": "Create Maintenance Record",
+          "name": "1. Create Maintenance Ticket",
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -787,16 +1039,213 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"light_id\": 1,\n  \"maintenance_type\": \"preventive\",\n  \"description\": \"Quarterly maintenance\",\n  \"scheduled_date\": \"2024-02-01\"\n}"
+              "raw": "{\n  \"ticket_id\": \"MAINT-001\",\n  \"ticket_desc\": \"Lamp not working - street light pole #42\",\n  \"pole_id\": \"1\",\n  \"zone_id\": \"1\",\n  \"sla_hours\": 24\n}"
             },
             "url": {
-              "raw": "http://localhost:3000/api/maintenance",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "3000",
-              "path": ["api", "maintenance"]
-            }
-          }
+              "raw": "{{base_url}}/api/maintenance/schedule",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "schedule"
+              ]
+            },
+            "description": "Create a new maintenance ticket with pending status"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Assign Ticket to User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assignedTo\": \"USER-123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/MAINT-001/assign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "MAINT-001",
+                "assign"
+              ]
+            },
+            "description": "Assign a maintenance ticket to a user (changes status to assigned)"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Update Ticket Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/MAINT-001/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "MAINT-001",
+                "status"
+              ]
+            },
+            "description": "Update ticket status. Allowed values: pending, assigned, in_progress, completed"
+          },
+          "response": []
+        },
+        {
+          "name": "4. Get Pending Maintenance Tickets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/pending?zoneId=1&limit=50",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "pending"
+              ],
+              "query": [
+                {
+                  "key": "zoneId",
+                  "value": "1",
+                  "description": "Zone ID (required)"
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Number of records to return (optional, default: 50)"
+                }
+              ]
+            },
+            "description": "Get all pending maintenance tickets for a specific zone (status: pending, assigned, in_progress)"
+          },
+          "response": []
+        },
+        {
+          "name": "5. Get Maintenance History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/history?zoneId=ZONE-01&limit=50",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "zoneId",
+                  "value": "ZONE-01",
+                  "description": "Zone ID (required)"
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Number of records to return (optional, default: 50)"
+                }
+              ]
+            },
+            "description": "Get complete maintenance history for a zone (all statuses)"
+          },
+          "response": []
+        },
+        {
+          "name": "6. Get Ticket by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/MAINT-001",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "MAINT-001"
+              ]
+            },
+            "description": "Retrieve a specific maintenance ticket by its ID"
+          },
+          "response": []
+        },
+        {
+          "name": "7. Get Maintenance Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/stats?zoneId=ZONE-01",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "stats"
+              ],
+              "query": [
+                {
+                  "key": "zoneId",
+                  "value": "ZONE-01",
+                  "description": "Zone ID (required)"
+                }
+              ]
+            },
+            "description": "Get statistics for maintenance tickets in a zone (total, pending, assigned, in_progress, completed)"
+          },
+          "response": []
+        },
+        {
+          "name": "8. Delete Ticket",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/maintenance/MAINT-001",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "maintenance",
+                "MAINT-001"
+              ]
+            },
+            "description": "Delete a maintenance ticket by its ID"
+          },
+          "response": []
         }
       ]
     },
@@ -816,11 +1265,17 @@
             "url": {
               "raw": "http://localhost:3000/api/automation-rules",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "automation-rules"]
+              "path": [
+                "api",
+                "automation-rules"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create Automation Rule",
@@ -843,11 +1298,17 @@
             "url": {
               "raw": "http://localhost:3000/api/automation-rules",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "automation-rules"]
+              "path": [
+                "api",
+                "automation-rules"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -867,11 +1328,17 @@
             "url": {
               "raw": "http://localhost:3000/api/carbon-tracking",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "carbon-tracking"]
+              "path": [
+                "api",
+                "carbon-tracking"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Record Carbon Emission",
@@ -894,11 +1361,17 @@
             "url": {
               "raw": "http://localhost:3000/api/carbon-tracking",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "carbon-tracking"]
+              "path": [
+                "api",
+                "carbon-tracking"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -918,11 +1391,17 @@
             "url": {
               "raw": "http://localhost:3000/api/controller",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "controller"]
+              "path": [
+                "api",
+                "controller"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Control Light (On/Off/Dim)",
@@ -945,11 +1424,18 @@
             "url": {
               "raw": "http://localhost:3000/api/controller/control",
               "protocol": "http",
-              "host": ["localhost"],
+              "host": [
+                "localhost"
+              ],
               "port": "3000",
-              "path": ["api", "controller", "control"]
+              "path": [
+                "api",
+                "controller",
+                "control"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     }
@@ -959,6 +1445,11 @@
       "key": "token",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "base_url",
+      "value": "",
+      "type": "default"
     }
   ]
 }
