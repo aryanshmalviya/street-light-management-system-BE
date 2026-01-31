@@ -151,3 +151,9 @@ CREATE TABLE IF NOT EXISTS public.zones
 
 ALTER TABLE IF EXISTS public.users
     ADD COLUMN password character varying;
+
+    ALTER TABLE IF EXISTS public.assets
+    ADD COLUMN wattage numeric;
+
+ALTER TABLE IF EXISTS public.assets
+    ADD COLUMN pole_height numeric;

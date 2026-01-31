@@ -33,7 +33,11 @@ class StreetLightService {
       throw new Error(`Failed to fetch asset: ${error.message}`);
     }
   }
+/**ALTER TABLE IF EXISTS public.assets
+    ADD COLUMN wattage numeric;
 
+ALTER TABLE IF EXISTS public.assets
+    ADD COLUMN pole_height numeric; */
   static async createLight(lightData) {
     try {
       const {
@@ -44,13 +48,15 @@ class StreetLightService {
         status,
         gps_lat,
         gps_lng,
+        wattage,
+        pole_height
       } = lightData;
       const pole_id = ulid ();
       const result = await db.query(
-        `INSERT INTO assets (pole_id, zone_id, controller_id, fixture_type, installed_on, status, gps_lat, gps_lng)
+        `INSERT INTO assets (pole_id, zone_id, controller_id, fixture_type, installed_on, status, gps_lat, gps_lng,wattage,pole_height)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          RETURNING *`,
-        [pole_id, zone_id, controller_id, fixture_type, installed_on, status, gps_lat, gps_lng]
+        [pole_id, zone_id, controller_id, fixture_type, installed_on, status, gps_lat, gps_lng,wattage,pole_height]
       );
 
       return result.rows[0];
