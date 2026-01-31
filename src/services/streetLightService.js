@@ -55,6 +55,8 @@ class StreetLightService {
 
       return result.rows[0];
     } catch (error) {
+      console.log(error);
+      
       throw new Error(`Failed to create asset: ${error.message}`);
     }
   }
