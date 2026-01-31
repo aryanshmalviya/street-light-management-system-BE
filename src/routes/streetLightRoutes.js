@@ -14,7 +14,6 @@ router.get('/:id', streetLightController.getLightById);
 router.post(
   '/',
   [
-    body('pole_id').notEmpty().withMessage('pole_id is required'),
     body('zone_id').notEmpty().withMessage('zone_id is required'),
   ],
   streetLightController.createLight
