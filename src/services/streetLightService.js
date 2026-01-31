@@ -54,7 +54,7 @@ ALTER TABLE IF EXISTS public.assets
       const pole_id = ulid ();
       const result = await db.query(
         `INSERT INTO assets (pole_id, zone_id, controller_id, fixture_type, installed_on, status, gps_lat, gps_lng,wattage,pole_height)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10)
          RETURNING *`,
         [pole_id, zone_id, controller_id, fixture_type, installed_on, status, gps_lat, gps_lng,wattage,pole_height]
       );
