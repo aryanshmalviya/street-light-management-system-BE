@@ -1,3 +1,4 @@
+const { ulid } = require('ulid');
 const db = require('../database/connection');
 const mqttClient = require('../mqtt/mqttcontroller');
 const logger = require('../utils/logger');
@@ -36,7 +37,6 @@ class StreetLightService {
   static async createLight(lightData) {
     try {
       const {
-        pole_id,
         zone_id,
         controller_id,
         fixture_type,
@@ -45,7 +45,7 @@ class StreetLightService {
         gps_lat,
         gps_lng,
       } = lightData;
-
+      const pole_id = ulid ();
       const result = await db.query(
         `INSERT INTO assets (pole_id, zone_id, controller_id, fixture_type, installed_on, status, gps_lat, gps_lng)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
