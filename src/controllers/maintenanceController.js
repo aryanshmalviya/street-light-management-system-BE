@@ -3,11 +3,11 @@ const logger = require('../utils/logger');
 
 exports.scheduleMaintenance = async (req, res) => {
   try {
-    const { ticket_id, ticket_desc, pole_id, zone_id } = req.body;
+    const { ticket_desc, pole_id, zone_id } = req.body;
 
-    if (!ticket_id || !ticket_desc || !pole_id || !zone_id) {
+    if (!ticket_desc || !pole_id || !zone_id) {
       return res.status(400).json({
-        error: 'ticket_id, ticket_desc, pole_id, and zone_id are required'
+        error: 'ticket_desc, pole_id, and zone_id are required'
       });
     }
 
@@ -55,15 +55,31 @@ exports.updateTicketStatus = async (req, res) => {
 
 exports.getPendingMaintenance = async (req, res) => {
   try {
-    const { zoneId, limit } = req.query;
+    const { zoneId, limit, is_completed, status, start_date, end_date } =
+      req.query;
 
     if (!zoneId) {
       return res.status(400).json({ error: 'zoneId is required' });
     }
 
+    const normalizedZone = String(zoneId).trim().toLowerCase();
+    const includeAllZones =
+      normalizedZone === 'all' ||
+      normalizedZone === 'all zones' ||
+      normalizedZone === 'all_zones';
+
+    const isCompleted =
+      is_completed === '1' ||
+      String(is_completed).toLowerCase() === 'true';
+
     const maintenance = await MaintenanceService.getPendingTickets(
-      zoneId,
-      limit || 50
+      includeAllZones ? null : zoneId,
+      limit || 50,
+      status,
+      isCompleted,
+      start_date,
+      end_date,
+      includeAllZones
     );
     res.json({ success: true, data: maintenance });
   } catch (error) {

@@ -1,22 +1,27 @@
+const { ulid } = require('ulid');
 const db = require('../database/connection');
 
 class MaintenanceService {
   static async createTicket(ticketData) {
     try {
-      const {
-        ticket_id,
-        ticket_desc,
-        pole_id,
-        zone_id,
-        sla_hours,
-      } = ticketData;
+      const { ticket_id, ticket_desc, pole_id, zone_id, sla_hours } =
+        ticketData;
+      const ticketId = ticket_id || ulid();
+
+      const existing = await db.query(
+        `SELECT 1 FROM maintenance_tickets WHERE pole_id = $1 AND zone_id = $2 LIMIT 1`,
+        [pole_id, zone_id],
+      );
+      if (existing.rows.length > 0) {
+        throw new Error('Maintenance ticket already exists for this pole in this zone');
+      }
 
       const result = await db.query(
         `INSERT INTO maintenance_tickets (ticket_id, ticket_desc, pole_id, zone_id, created_at, sla_hours, status)
          VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5, $6)
          RETURNING *`,
         [
-          ticket_id,
+          ticketId,
           ticket_desc,
           pole_id,
           zone_id,
@@ -83,16 +88,63 @@ class MaintenanceService {
     }
   }
 
-  static async getPendingTickets(zoneId, limit = 50) {
+  static async getPendingTickets(
+    zoneId,
+    limit = 50,
+    status,
+    isCompleted = false,
+    startDate,
+    endDate,
+    includeAllZones = false,
+  ) {
     try {
+      const normalizedStatus = String(status || '').trim().toLowerCase();
+      const conditions = ['1=1'];
+      const params = [];
+
+      if (!includeAllZones) {
+        params.push(zoneId);
+        conditions.push(`m.zone_id = $${params.length}`);
+      }
+
+      if (normalizedStatus === 'all') {
+        // no status filter
+      } else if (
+        ['pending', 'assigned', 'in_progress', 'completed'].includes(
+          normalizedStatus,
+        )
+      ) {
+        params.push(normalizedStatus);
+        conditions.push(`m.status = $${params.length}`);
+      } else if (isCompleted) {
+        params.push('completed');
+        conditions.push(`m.status = $${params.length}`);
+      } else {
+        conditions.push(
+          "m.status IN ('pending', 'assigned', 'in_progress')",
+        );
+      }
+
+      if (startDate) {
+        params.push(startDate);
+        conditions.push(`m.created_at >= $${params.length}`);
+      }
+
+      if (endDate) {
+        params.push(endDate);
+        conditions.push(`m.created_at <= $${params.length}`);
+      }
+
+      params.push(limit);
+
       const result = await db.query(
         `SELECT m.*, u.name as assigned_to_name
          FROM maintenance_tickets m
          LEFT JOIN users u ON m.assigned_to = u.user_id
-         WHERE m.zone_id = $1 AND m.status IN ('pending', 'assigned', 'in_progress')
+         WHERE ${conditions.join(' AND ')}
          ORDER BY m.created_at ASC
-         LIMIT $2`,
-        [zoneId, limit]
+         LIMIT $${params.length}`,
+        params
       );
 
       return result.rows;
