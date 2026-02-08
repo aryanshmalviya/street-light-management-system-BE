@@ -9,8 +9,6 @@ const router = express.Router();
 
 
 router.get('/pole/:poleId', telemetryController.getTelemetryByPole);
-
-
 // router.get('/:id', telemetryController.getTelemetryById);
 
 
